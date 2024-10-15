@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+  Your shopping cart
+{% endblock %}
+
+
+{% block content %}
+
+<div class="cart-item">
+  <h3>Your shopping cart</h3>
+
+  <style>
+    .cart {
+      width: 100%; /* Ensure the table takes full width */
+      border-collapse: collapse; /* Remove spacing between cells */
+    }
+
+    .cart th, .cart td {
+      padding: 5px; /* Adjust padding for table cells */
+      height: 60px; /* Set a fixed height for each row */
+      vertical-align: middle; /* Center content vertically */
+    }
+
+    .standard-image {
+      height: 40px; /* Set a fixed height for the image */
+      width: 40px; /* Set a smaller width for the image */
+      object-fit: cover; /* Maintain aspect ratio */
+      border-radius: 2px; /* Optional: adds rounded corners */
+    }
+  </style>
+  <table class="cart">
+    <thead>
+      <tr>
+        <th>Image</th>
+        <th>Product</th>
+        <th>Description</th>
+        <th>Quantity</th>
+        <th>Remove</th>
+        <th>Unit price</th>
+        <th>Total Price</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in cart %}
+        {% with product=item.product %}
+          <tr>
+            <td>
+              <a href="{{ product.get_absolute_url }}">
+                <img class="standard-image" src="{% if product.image %}{{ product.image.url }}
+                {% else %}{% static "img/no_image.png" %}{% endif %}">
+              </a>
+            </td>
+
+            <td>{{ product.name }}</td>
+
+            <td>{{ item.product_desc }}</td>
+
+
+            <td>
+              <form action="{% url "cart:cart_add" product.id %}" method="post">
+                {{ item.update_quantity_form.quantity }}
+                {{ item.update_quantity_form.override }}
+                <input type="submit" value="Update">
+                {% csrf_token %}
+              </form>
+            </td>
+
+            <td>
+              <form action="{% url "cart:cart_remove" product.id %}" method="post">
+                <input type="submit" value="Remove">
+                {% csrf_token %}
+              </form>
+            </td>
+            <td class="num">${{ item.price }}</td>
+
+            <td class="num">${{ item.total_price }}</td>
+          </tr>
+        {% endwith %}
+      {% endfor %}
+      <tr class="total">
+        <td>Total</td>
+        <td colspan="4"></td>
+        <td class="num">${{ cart.get_total_price }}</td>
+      </tr>
+    </tbody>
+  </table>
+  <p class="text-right">
+    <a href="{% url "shop:index" %}" class="button
+    light">Continue shopping</a>
+    <a href="{% url "orders:order_create" %}" class="button">
+      Checkout
+    </a>
+  </p>
+</div>
+{% endblock %}

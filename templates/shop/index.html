@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Start{% endblock %}
+{% block content %}
+<div class="background">
+    <div class="container mt-0">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title">Order Cake</h5>
+                        <p class="card-text">We offer a variety of cakes for all occasions.</p>
+                        <a href="{% url 'shop1:product_list' %}" class="btn btn-primary">Learn More</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title">Baking Workshop</h5>
+                        <p class="card-text">Join our baking workshops to learn how to make delicious treats. We have lots of experienced instructors to provide a wonderful cooking experience specially for you!</p>
+                        <a href="{% url 'shop2:product_list' %}" class="btn btn-primary">Learn More</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title">Self-service Baking Studio</h5>
+                        <p class="card-text">Unleash your creativity in our self-service baking studio.</p>
+                        <a href="{% url 'shop3:baking_studio' %}" class="btn btn-primary">Learn More</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title">Store</h5>
+                        <p class="card-text">Explore our range of baking tools and supplies.</p>
+                        <a href="{% url 'shop4:product_list' %}" class="btn btn-primary">Learn More</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+        
+    .background {
+        background-image: url("{% static 'img/shop4-detail-background.jpg' %}"); /* Adjust the path */
+        background-size: cover; /* Cover the entire container */
+        background-position: center; /* Center the image */
+        background-repeat: no-repeat; /* Prevent repeating */
+        height: 200vh; /* Full viewport height */
+        position: relative; /* Position for absolute children if needed */
+    } 
+
+</style>
+{% endblock %}

@@ -1,0 +1,140 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %} {{ product.name }}{% endblock %}
+{% block content %}
+
+<style>
+    .background {
+        background: repeating-linear-gradient(
+            45deg, /* Angle of the lines */
+            rgba(245, 230, 202, 0.3), /* Color of the lines with more transparency */
+            rgba(245, 230, 202, 0.3) 20px, /* Width of the lines */
+            rgba(255, 255, 255, 0.3) 20px, /* Color of the space between lines with more transparency */
+            rgba(255, 255, 255, 0.3) 40px /* Width of the space between lines */
+        );
+        height: 100vh; /* Full viewport height */
+    }
+    .card {
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+    .card-body {
+        padding: 20px;
+    }
+    .card-title {
+        color: #8c5f2c; /* Dark brown heading */
+    }
+    .card-subtitle {
+        color: #333; /* Dark grey text */
+    }
+    .price {
+        color: #8c5f2c; /* Dark brown text */
+        font-size: 20px;
+        font-weight: bold;
+    }
+    .btn-primary {
+        background-color: #8c5f2c; /* Dark brown button */
+        border-color: #8c5f2c;
+    }
+    .btn-primary:hover {
+        background-color: #555; /* Darken button background color on hover */
+    }
+    .alert-box {
+        background-color: #f9f9f9; /* Light grey background */
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        border-left: 5px solid #8c5f2c; /* Dark brown border */
+    }
+    .alert-box p {
+        margin: 0;
+        font-size: 14px;
+        color: #333; /* Dark grey text */
+    }
+    .alert-box strong {
+        color: #8c5f2c; /* Dark brown text */
+    }
+</style>
+
+<!-- Breadcrumb -->
+<section id="bc" class="mt-3">
+    <div class="container">
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item">
+            <a href="{% url 'shop3:baking_studio' %}"><i class="fas fa-home"></i>Self-service Baking Studio</a>
+          </li>
+          <li class="breadcrumb-item">
+            <a href="{% url 'shop3:booking' %}">Booking: Session</a>
+          </li>
+          <li class="breadcrumb-item">
+            <a href="{% url 'shop3:product_list' %}?studio_name={{ studio_name }}&studio_district={{ studio_district }}&date={{ date }}&time_slot={{ time_slot }}&guests={{ guests }}">DIY Package Selection</a>
+            </li>
+          <li class="breadcrumb-item active">Booking details</li>
+        </ol>
+      </nav>
+    </div>
+  </section>
+
+<div class='background'>
+<div class="container mt-0"> 
+    <div class="card">
+        <div class="row g-0">
+            <div class="col-md-4">
+                <img class="img-fluid" 
+                     src="{% if product.image %}{{ product.image.url }}{% else %}
+                     {% static "img/no_image.png" %}{% endif %}" 
+                     alt="{{ product.name }}" style="max-height: 300px; object-fit: cover;">
+            </div>
+            <div class="col-md-8">
+                <div class="card-body">
+                    <h6 class="card-title" style="font-weight: normal;">DIY Package</h6>
+                    <h5 class="card-title">{{ product.name }}</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">
+                    </h6>
+                    <p class="price">${{ product.price }}</p>
+
+<!-------------------------------------------------------------------------------------------->
+
+                    <form action="{% url "cart:cart_add" product.id %}" method="post">
+                        <div class="mb-3">
+                            <p><strong>Studio:  </strong>{{ studio_name }} - {{ studio_district }}</p>  <!-- Display the value -->
+                            <input type="hidden" name="studio_name" value="{{ studio_name }}">
+                            <input type="hidden" name="studio_district" value="{{ studio_district }}">
+                            <input type="hidden" name="studio_address" value="{{ studio_address }}">
+                        </div>
+                        <div class="mb-3">
+                            
+                            <p><strong>Date: </strong>{{ date }}</p>  <!-- Display the value -->
+                            <input type="hidden" name="date" value="{{ date }}">
+                        </div>
+                        
+                      <div class="mb-3">
+                            <p><strong>Time: </strong>{{ time_slot }}</p>  <!-- Display the value -->
+                            <input type="hidden" name="time_slot" value="{{ time_slot }}">
+                        </div>
+                        <div class="mb-3">
+                            <p><strong>Guest(s): </strong>{{ guests }}</p>  <!-- Display the value -->
+                            
+                              <input type="hidden" name="guests" value="{{ guests }}">
+                        </div>
+                        <div class="mb-3">
+                            <p><strong>Set of diy package(s):</strong> {{ cart_product_form.quantity }} </p> <!-- Render quantity field -->
+                        </div>
+                        <div class="mb-3 alert-box">
+                            <p><strong>Note:</strong> Each DIY package can accommodate a maximum of 3 people, including one child (3-12 years old). If your group exceeds this limit, please purchase additional DIY packages. Otherwise, you will need to buy extra packages on site.</p>
+                        </div>
+
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-primary">Add to cart</button>
+                    </form>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+{% endblock %}

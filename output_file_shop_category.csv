@@ -1,0 +1,14 @@
+id,name,slug,shop_id,image
+3,Cooking Course 1,cooking-course-1,2,""
+6,Easy,easy,3,""
+7,Intermediate,intermediate,3,""
+8,Difficult,difficult,3,""
+9,Cheese Cake,CheeseCake,1,""
+10,Chocolate Cake,ChocolateCake,1,""
+11,Napoleon,Napoleon,1,""
+12,Sponge/Cream cake,SpongeCreamCake,1,""
+13,Tart,Tart,1,""
+14,Customize Cake,CustomizeCake,1,""
+1,Bakingware,bakingware,4,catagories/b.jpg
+2,Cookware,cookware,4,catagories/Christy.jpg
+5,Storage,storage,4,catagories/Anmitsuyokanjapanesesweets_Gw0cGus.jpg

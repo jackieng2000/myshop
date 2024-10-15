@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}
+{% if category %}{{ category.name }}{% else %} All product{% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="background">
+<div class="container mt-0">
+    <div class="row">
+        <div class="col-md-3 category-list">
+            <ul class="list-group category-list">
+                <li class="list-group-item {% if not category %}active{% else %}inactive{% endif %}">
+                    <a class ="list-group-item" href="{% url "shop4:product_list" %}">All Kitchenware</a>
+                </li>
+                {% for c in categories %}
+                <li class="list-group-item {% if category.slug == c.slug %}active{% else %}inactive{% endif %}">
+                    <a class ="list-group-item" href="{{ c.get_absolute_shop4_url }}">{{ c.name }}</a>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="col-md-9 ">
+            <h1 class="text-category">{% if category %}{{ category.name }}{% else %}All Kitchenware{% endif %}</h1>
+            <div class="row">
+                {% for product in products %}
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <a href="{{ product.get_absolute_shop4_url }}">
+                            <img src="{% if product.image %}{{ product.image.url }}{% else %}{% static "img/no_image.png" %}{% endif %}" class="card-img-top" alt="{{ product.name }}">
+                        </a>
+                        <div class="card-body">
+                            <p class="card-title">
+                                {{ product.description }}
+                            </p>
+                            <p class="card-text text-warning">${{ product.price }}</p>
+                            
+                            <!-- Button to jump to the link -->
+                            <a href="{{ product.get_absolute_shop4_url }}" class="btn btn-primary">Select</a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+{% block extra_css %}
+<style>
+    .background {
+        background-image: url("{% static 'img/shop4-detail-background.jpg' %}"); /* Adjust the path */
+        background-size: cover; /* Cover the entire container */
+        background-position: center; /* Center the image */
+        background-repeat: no-repeat; /* Prevent repeating */
+        height: 200vh; /* Full viewport height */
+        position: relative; /* Position for absolute children if needed */
+    }
+
+    .category-list {
+        background-color: rgba(255, 255, 255, 0.0); /* White with 80% opacity */
+        padding: 0px; /* Add padding to the category list */
+        border-radius: 8px; /* Rounded corners */
+        opacity: 0.2  /* 50% transparent */
+        border: none; /* Remove border */
+
+        margin-bottom: 15px; /* Space below category list */
+    }
+
+    .list-group-item {
+        background-color: transparent; /* No background color */
+        margin-bottom: 0px; /* Space between list items */
+        border-radius: 1px; /* Rounded corners for list items */
+        border: none; /* Remove border */
+        opacity: 1.0; /* 50% transparent */
+        transition: background-color 0.3s; /* Smooth color transition */
+    }
+
+    .list-group-item:hover {
+        background-color: rgba(255, 255, 224, 0.8); /* Light yellow with opacity */
+        opacity: 1.0; /* 50% transparent */
+        border: none; /* Remove border */
+    }
+
+    .list-group-item.active {
+        background-color: rgba(255, 255, 255, 1); /* Fully opaque */
+        opacity: 1.0; /* 50% transparent */
+        font-weight: bold; /* Make text bold */
+    }
+
+    .text-category {
+        color: #000000;
+        opacity: 0.9; 
+    }
+    .card-img-top {
+        width: 100%; /* Ensures the image fills the card width */
+        height: 200px; /* Set a fixed height for the image */
+        object-fit: cover; /* Ensures the image covers the area while maintaining aspect ratio */
+    }
+</style>
+{% endblock %}
+
+{% endblock %}

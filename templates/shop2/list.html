@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+{% block title %}Baking Course{% endblock %}
+{% load static %}
+{% block content %}
+
+    <style>
+        .background {
+            background-image: url("{% static 'img/common-img/backg02.jpg' %}");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            height: 200vh;
+            position: relative;
+        }
+
+        .booking-button {
+            position: fixed;
+            right: 20px;
+            bottom: 20px;
+            background-color: #ff6347; /* Changing to a brighter color */
+            color: white;
+            padding: 20px 40px; /* Further increased padding for a larger button */
+            border-radius: 10px; /* Rounded corners for a modern look */
+            cursor: pointer;
+            transition: background-color 0.3s;
+            font-size: 20px; /* Larger font size for better visibility */
+            text-transform: uppercase; /* Uppercase text for emphasis */
+            font-weight: bold; /* Bold text for emphasis */
+            etter-spacing: 2px; /* Increased letter spacing for clarity */
+        }
+        .booking-button:hover {
+            background-color: #ff4837; /* Darker color on hover for contrast */
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f5e6ca;
+        }
+
+        h1 {
+            color: #800080;
+            margin-bottom: 20px;
+        }
+
+        /* Media Queries for responsiveness */
+        @media (max-width: 600px) {
+            h1, h2 {
+                font-size: 1.5em; /* Smaller headings on mobile */
+            }
+        }
+
+        .card-body {
+            padding: 0.5rem;  /* Adjust this value as needed */
+        }
+        .card-body p {
+            margin: 0;  /* Ensures no margin around the paragraph */
+        }
+    </style>
+
+    <div class='background'>
+        <div class="container mt-0">
+            <h2 class="mt-0 text-center">Choose Your Favourite Taste</h2>
+            <div class="row">
+                {% for menu_item in menu_items %}
+                    <div class="col-md-4 mb-4">
+                        <div class="card">
+                            <div class="card-body text-center">
+                                <label for="course{{ forloop.counter }}">
+                                    <strong>{{ menu_item.name }}</strong>
+                                </label>
+                                {% if menu_item.image %}
+                                    <img src="{{ menu_item.image.url }}" alt="{{ menu_item.name }}" class="img-fluid mt-2">
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            <div class="card mt-0 mb-0">
+                <div class="card-body p-1">  <!-- Reduced padding -->
+                    <p class="m-0"> <!-- Remove margin from the paragraph -->
+                        Come learn the art of baking from our renowned Chef. With years of experience and a passion for pastries, they will guide you through the secrets of creating delectable desserts that will delight your taste buds and impress your friends and family.
+                    </p>
+                </div>
+            </div>
+
+            <div class="card mt-0">
+                <div class="card-body">
+                    <div class="row">
+                        {% for instructor in instructors %}
+                            <div class="col-md-4 mb-0">
+                                <div class="card text-center">
+                                    <div class="card-body">
+                                        <h5>{{ instructor.name }}</h5>
+                                        {% if instructor.image %}
+                                            <img src="{{ instructor.image.url }}" alt="{{ instructor.name }}" class="img-fluid">
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        {% empty %}
+                            <p>No instructors available at the moment.</p>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    </div>
+
+
+<a href="{% url 'shop2:available_course_sessions' %}" class="booking-button">Book Now</a>
+{% endblock %}

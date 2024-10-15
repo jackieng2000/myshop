@@ -1,0 +1,192 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<title>{% block title %} FAQ {% endblock %}</title>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+    body {
+        font-family: 'Dancing Script', cursive;
+        font-size: 18px; /* Slightly larger font size for readability */
+        line-height: 1.6; /* Increased line height for better legibility */
+        margin: 0;
+        padding: 0;
+        background-color: #f5e6ca; /* Warm beige background */
+        color: #4d2d00; /* Rich brown text color */
+    }
+    
+    h1, h2, h3 {
+        font-family: 'Caveat', cursive; /* Cozy bakery-style font */
+    }
+    
+    p {
+        font-family: 'Merienda', cursive; /* Friendly and inviting font */
+    }
+    
+    .container1 {
+        max-width: 800px;
+        margin: 20px auto;
+        padding: 20px;
+        background-color: #f9f1e6; /* Light beige container background */
+        border-radius: 15px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    .box {
+        margin-top: 20px;
+        padding: 15px;
+        background-color: #f5e6ca; /* Warm beige info background */
+        border: 1px solid #d4a373; /* Warm brown info border */
+        border-radius: 10px;
+    }
+    
+    .box h2 {
+        color: #4d2d00; /* Rich brown info heading color */
+        font-size: 1.5em;
+    }
+
+    .hidden {
+        display: none;
+    }
+
+    .toggle-title {
+        cursor: pointer;
+        color: #4d2d00;
+        font-size: 1.5em;
+        margin-top: 20px;
+        padding: 10px;
+        border: 2px dashed #d4a373; /* Dashed border to indicate clickable area */
+        border-radius: 10px;
+        background-color: #f5e6ca; /* Same background color as the box */
+        text-align: center;
+    }
+    .toggle-title:hover {
+        background-color: #e4d5b8; /* Slightly darker background on hover */
+    }
+
+    .pagination {
+        margin-top: 20px;
+        text-align: center;
+    }
+    .pagination button {
+        margin: 0 5px;
+        padding: 5px 10px;
+        border: none;
+        background-color: #d4a373;
+        color: white;
+        cursor: pointer;
+        border-radius: 5px;
+        transition: background-color 0.3s;
+    }
+    .pagination button:hover {
+        background-color: #c49b6e;
+    }
+    .pagination button.active {
+        background-color: #e4d5b8;
+        color: #4d2d00;
+    }
+
+    .horizontal-menu {
+        display: flex;
+        justify-content: space-around;
+        margin-top: 20px;
+        background-color: #f5e6ca;
+        padding: 10px;
+        border-radius: 10px;
+        border: 1px solid #d4a373;
+    }
+    .horizontal-menu div {
+        cursor: pointer;
+        padding: 10px 20px;
+        border-radius: 5px;
+        transition: background-color 0.3s;
+    }
+    .horizontal-menu div:hover {
+        background-color: #e4d5b8;
+    }
+    .horizontal-menu .active {
+        background-color: #d4a373;
+        color: white;
+    }
+</style>
+</head>
+<body>
+    <div class="container1">
+        <h1>Frequently Asked Questions</h1>
+        
+        <div class="horizontal-menu">
+            <div onclick="showSection('cake-order')" id="menu-cake-order" class="active">Cake Order</div>
+            <div onclick="showSection('baking-workshop')" id="menu-baking-workshop">Baking Workshop</div>
+            <div onclick="showSection('self-service')" id="menu-self-service">Self-service Baking Studio</div>
+            <div onclick="showSection('store')" id="menu-store">Store</div>
+        </div>
+        
+        <div id="faq-sections-cake-order" class="faq-section box">
+            <!-- Cake Order FAQ content goes here -->
+        </div>
+        
+        <div id="faq-sections-baking-workshop" class="faq-section box hidden">
+            <!-- Baking Workshop FAQ content goes here -->
+        </div>
+
+        <div id="faq-sections-self-service" class="faq-section box hidden">
+            <div class="general-info">
+                <h2>General Information</h2>
+                <p>1. Due to hygiene issues, pets and outside food are not allowed in the studio.</p>
+                <p>2. The self-service baking studio accepts walk-ins, but since the number of DIY Packages available each day is limited, it is recommended to book online in advance to ensure you can purchase your desired DIY package and avoid a wasted trip.</p>
+                <p>3. Reservations can only be made up to 3 months in advance, with a maximum of 10 people. For groups larger than 10 or for exclusive venue bookings, please contact the company.</p>
+                <p>4. Online payments are non-refundable. If you need to change any information, please contact the studio.</p>
+                <p>5. Each DIY package can be made by up to 3 people, including one child aged 3-12. If the number of people exceeds this limit, a second dessert must be made. If the instructions are not followed when ordering online, additional DIY package fees must be paid on-site.</p>
+                <p>6. Each DIY package includes a tablet that plays related instructional videos, and staff are available on-site to assist with the use of tools.</p>
+                <p>7. The store provides all necessary materials and tools, but guests can also prepare special materials themselves. Various decorations and birthday/holiday toppers, sugar beads, candles, balloons, fruits, etc., are available for purchase. For detailed items and ingredients, please contact the store for inquiries.</p>
+                <p>8. For safety reasons, each child aged 3-12 must be accompanied by an adult. The safety of the child is the responsibility of the accompanying adult. If a child continuously poses a danger or disturbs other guests, the store reserves the right to ask the guests to leave.</p>
+                <p>9. Business hours: 10:00 am - 10:45 pm. Each session lasts 3 hours. Latecomers can still enter but may not be able to complete the baking. An additional fee of $30 will be charged for every 15 minutes of overtime. If the overtime exceeds 45 minutes, guests will be asked to leave.</p>
+                <p>10. Any damage to equipment/tools caused by human error must be compensated at the original price.</p>
+            </div>
+            <div class="weather-warnings">
+                <h2>Weather Warnings</h2>
+                <p>Yellow/Red Rainstorm Warning or Typhoon Signal No. 1/3: The studio will operate as usual.</p>
+                <p>Black Rainstorm Warning or Typhoon Signal No. 8:</p>
+                <ul>
+                    <li>If hoisted before opening hours, the studio will not operate.</li>
+                    <li>If hoisted during business hours, the studio will continue to operate until all guests have completed their activities and left safely.</li>
+                    <li>If the warning is canceled:</li>
+                    <ul>
+                        <li>Before 5 pm: The studio will resume operations within two hours after the warning is canceled or downgraded.</li>
+                        <li>After 5 pm: The studio will not operate for the rest of the day.</li>
+                    </ul>
+                </ul>
+            </div>
+        </div>
+
+        <div id="faq-sections-store" class="faq-section box hidden">
+            <!-- Store FAQ content goes here -->
+        </div>
+    </div>
+    <script>
+        function showSection(section) {
+            const sections = document.querySelectorAll('.faq-section');
+            sections.forEach(sec => {
+                sec.classList.add('hidden');
+            });
+
+            const menuItems = document.querySelectorAll('.horizontal-menu div');
+            menuItems.forEach(item => {
+                item.classList.remove('active');
+            });
+
+            document.getElementById(`faq-sections-${section}`).classList.remove('hidden');
+            document.getElementById(`menu-${section}`).classList.add('active');
+        }
+
+        // Initialize the first section as visible
+        document.addEventListener('DOMContentLoaded', () => {
+            showSection('cake-order');
+        });
+    </script>
+</body>
+</html>
+{% endblock %}

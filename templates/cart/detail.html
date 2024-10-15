@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+Shopping Cart
+{% endblock %}
+
+{% block content %}
+<div class="background">
+<div class="container mt-0">
+  <p class="text-center">Your Shopping Cart</p>
+  <div class="row">
+    {% for item in cart %}
+      {% with product=item.product %}
+        <div class="col-12 mb-4">
+          <div class="card">  <!-- Parent card for the entire record -->
+            <div class="row no-gutters">
+              <!-- Card for the Image -->
+              <div class="col-md-4">
+                <img class="card-img standard-image" src="{% if product.image %}{{ product.image.url }}{% else %}{% static 'img/no_image.png' %}{% endif %}" alt="{{ product.name }}">
+              </div>
+
+              <!-- Card for Product Name and Description -->
+              <div class="col-md-4">
+                <div class="card-body">
+                  <h5 class="card-title">{{ product.name }}</h5>
+                  <p class="card-text">{{ item.product_desc | linebreaks }}</p>
+                </div>
+              </div>
+
+              <!-- Card for Quantity Update and Pricing -->
+              <div class="col-md-4">
+                <div class="card-body">
+                  <div class="d-flex justify-content-between align-items-center">
+                    <form action="{% url 'cart:cart_add' product.id %}" method="post" class="d-inline">
+                      <label for="quantity" style="margin-right: 5px;">Quantity</label>
+                      
+                      <input type="number" name="quantity" id="quantity" min="0" max="9" 
+                             value="{{ item.update_quantity_form.quantity.value }}" 
+                             class="form-control d-inline" 
+                             style="width: 60px; border: none; background-color: transparent; text-align: center;" 
+                             {% if product.shop_id == 1 %} disabled {% endif %}>
+                      
+                      {{ item.update_quantity_form.override }}
+                      
+                      <button type="submit" class="btn btn-primary btn-sm" {% if product.shop_id == 1 %}hidden{% endif %}>Update</button>
+                      
+                      {% csrf_token %}
+                  </form>
+                    <form action="{% url 'cart:cart_remove' product.id %}" method="post" class="d-inline">
+                      <button type="submit" class="btn btn-danger btn-sm">Remove</button>
+                      {% csrf_token %}
+                    </form>
+                  </div>
+                  <div class="mt-0">
+                    <strong>Unit price:</strong> ${{ item.price }}<br>
+                    <strong>Item total:</strong> ${{ item.total_price }}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div> <!-- End of the parent card -->
+        </div>
+      {% endwith %}
+    {% endfor %}
+  </div>
+
+  <div class="text-right mt-0">
+    <div class="alert alert-success">
+      <strong>Order Total:</strong> ${{ cart.get_total_price }}
+    </div>
+    <a href="{% url 'shop:index' %}" class="btn btn-light">Continue Shopping</a>
+    <a href="{% url 'orders:order_create' %}" class="btn btn-success">Checkout</a>
+  </div>
+</div>
+</div>
+
+<style>
+
+  .background {
+    background-image: url("{% static 'img/common-img/backg02.jpg' %}");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 200vh;
+    position: relative;
+}
+
+  .standard-image {
+    height: 200px; /* Set a fixed height for the image */
+    object-fit: cover; /* Maintain aspect ratio */
+    border-radius: 2px; /* Optional: adds rounded corners */
+  }
+</style>
+{% endblock %}

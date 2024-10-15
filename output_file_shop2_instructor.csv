@@ -1,0 +1,5 @@
+id,name,slug,description,image,available
+1,John,john,Desc,instructor/john.jpg,t
+2,Alice,alice,Desc,instructor/Christy.jpg,t
+3,Julia,julia,Desc,instructor/Jenny.jpeg,t
+4,Jackie,jackie,jackie is a good cook,instructor/Jenny_KVF4qdw.jpeg,f

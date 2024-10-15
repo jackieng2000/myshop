@@ -1,0 +1,271 @@
+{% extends 'base.html' %} 
+{% block content %}
+{% load humanize%}
+{% load static %}
+<!DOCTYPE html>
+<html>
+    <meta charset="utf-8" />
+    <title>{% block title %} Booking: Session{% endblock %}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5e6ca; /* Soft beige background */
+            margin: 0;
+            padding: 0;
+            border: 20px solid #f5e6ca; /* Widen the page border */
+        }
+        .container1 {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            position: relative; /* Add position relative to the container */
+        }
+        h1 {
+            text-align: center;
+            color: #8c5f2c; /* Dark brown heading */
+        }
+        p {
+            color: #8c5f2c; /* Dark brown paragraph text */
+        }
+        .location {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .location label {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 10px;
+            cursor: pointer;
+            position: relative; 
+        }
+        .location img {
+            width: 100%; /* Make the width adjust to fit the container */
+            height: 200px; /* Set a fixed height for uniformity */
+            object-fit: cover; /* Ensure the image covers the specified height */
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        label {
+            color: #8c5f2c; /* Dark brown label text */
+        }
+        input[type="date"]{
+            padding: 15px; /* Increase padding for larger clickable area */
+            width: calc(50% - 5px); /* Adjust width to accommodate padding */
+            display: inline-block;
+            margin-right: 10px;
+        }
+        .form-group {
+            display: flex;
+            align-items: center;
+            gap: 10px; /* Adjust the gap between elements as needed */
+            margin-bottom: 15px; /* Add space between form groups */
+        }
+        
+        .inline-label {
+            margin-right: 10px; /* Adjust the margin as needed */
+        }
+        
+        .inline-input {
+            width: calc(20% - 5px); /* Set a specific width for the input field */
+            padding: 15px; /* Add padding for better appearance */
+            border-radius: 4px; /* Rounded corners for input */
+        }
+        #next-button {
+            text-decoration: none !important;
+            background-color: #8c5f2c;
+            color: #fff;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1;
+            margin-top: 20px; 
+            position: relative; 
+            display: block; 
+            margin-left: auto; 
+            margin-right: auto;
+            cursor: pointer;
+        }
+        #next-button:hover {
+            background-color: #555;
+        }
+        .error-message {
+            color: red;
+            display: none;
+            margin-top: 10px;
+        }
+    </style>
+<!-- Breadcrumb -->
+<section id="bc" class="mt-3">
+    <div class="container">
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item">
+            <a href="{% url 'shop3:baking_studio' %}"> <i class="fas fa-home"></i> Self-service Baking Studio</a>
+          </li>
+          <li class="breadcrumb-item active">Booking: Session</li>
+        </ol>
+      </nav>
+    </div>
+  </section>
+
+<body>
+    <div class="container1">
+        <h1>Book Your Self-service Baking Session</h1>
+        <p> Each DIY package can accommodate a maximum of 3 people, including one child (3-12 years old). If your group exceeds this limit, please purchase additional DIY packages. Otherwise, you will need to buy extra packages on site.</p>
+        <form id="booking-form" action="{% url 'shop3:product_list' %}" method="post">
+                {% csrf_token %}
+                <div class="location">
+                    {% for studio in studios %}
+                    <label>
+                        <img src="{{ studio.photo.url }}" alt="{{ studio.name }} - {{ studio.district }}">
+                        <p style="text-align: center;">{{ studio.name }} <br>-{{ studio.address }}, {{ studio.district }}</p>
+                        <input type="radio" name="studio" value="{{ studio.id }}" id="studio-{{ forloop.counter }}">
+                    </label>
+                    {% endfor %}
+            </div>
+            <div class="form-group">
+                <label for="date">Select Date:</label>
+                <input type="date" id="date" name="date" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="guests" class="inline-label">Number of people:</label>
+                <input type="number" id="guests" name="guests" class="form-control inline-input" value="1" min="1" max="10">
+            </div>
+            <button type="button" class="btn btn-primary" id="check-availability-button" onclick="checkAvailability()">Check available timeslot </button>
+        
+        <div id="loading-message" style="display: none;">Loading...</div>
+        <div id="error-message" style="color: red;"></div>
+        <div id="available-slots">
+            <!-- Available time slots will be displayed here -->
+        </div>
+            <button type="submit" class="btn btn-primary" id="next-button">Next</button>
+            <div id="error-message" class="error-message">Please select studio, date, guests, and time slot.</div>
+        </form>
+    </div>
+</div>
+
+    <script>
+        function checkAvailability() {
+            const studioRadio = document.querySelector('input[name="studio"]:checked');
+            if (!studioRadio) {
+                document.getElementById('error-message').textContent = 'Please select a studio.';
+                return;
+            }
+            const studioId = studioRadio.value;
+            const date = document.getElementById('date').value;
+            if (!date) {
+                document.getElementById('error-message').textContent = 'Please select a date.';
+                return;
+            }
+            const guests = document.getElementById('guests').value;
+            if (!guests || guests == 0) {
+                document.getElementById('error-message').textContent = 'Please enter a valid number of guests (1-10).';
+                return;
+            } else if (guests > 10) {
+                document.getElementById('error-message').textContent = 'The number of guests cannot exceed 10.';
+                return;
+            } else {
+                document.getElementById('error-message').textContent = ''; // Clear any previous error messages
+            }
+            const checkButton = document.getElementById('check-availability-button');
+            const loadingMessage = document.getElementById('loading-message');
+    
+            checkButton.disabled = true;
+            loadingMessage.style.display = 'block';
+    
+            fetch(`/shop3/check_availability?studio_id=${studioId}&date=${date}&guests=${guests}`)
+                .then(response => response.json())
+                .then(data => {
+                    checkButton.disabled = false;
+                    loadingMessage.style.display = 'none';
+    
+                    if (data.error) {
+                        document.getElementById('error-message').textContent = data.error;
+                    } else {
+                        const availableSlotsDiv = document.getElementById('available-slots');
+                        availableSlotsDiv.innerHTML = '';
+                        data.available_slots.forEach(slot => {
+                            const slotDiv = document.createElement('div');
+                            slotDiv.innerHTML = `
+                                <input type="radio" id="slot-${slot.start_time}" name="time_slot" value="${slot.start_time}-${slot.end_time}" 
+                                       data-start-time="${slot.start_time}" data-end-time="${slot.end_time}" 
+                                       onclick="updateSessionDetails(this)">
+                                <label for="slot-${slot.start_time}">${slot.start_time} - ${slot.end_time}</label>
+                            `;
+                            availableSlotsDiv.appendChild(slotDiv);
+                        });
+                    }
+                })
+                .catch(error => {
+                    checkButton.disabled = false;
+                    loadingMessage.style.display = 'none';
+                    document.getElementById('error-message').textContent = 'An error occurred. Please try again.';
+                    console.error('Error:', error);
+                });
+        }
+    
+        document.addEventListener('DOMContentLoaded', function() {
+            const dateInput = document.getElementById('date');
+            const today = new Date();
+            const threeMonthsFromNow = new Date();
+            threeMonthsFromNow.setMonth(today.getMonth() + 3);
+            dateInput.min = today.toISOString().split('T')[0];
+            dateInput.max = threeMonthsFromNow.toISOString().split('T')[0];
+    
+            const radios = document.querySelectorAll('input[name="studio"]');
+            radios.forEach(radio => {
+                radio.addEventListener('change', function() {
+                    const studioId = this.value;
+                    fetchSessionDetails(studioId);
+                    validateForm();
+                });
+            });
+    
+            dateInput.addEventListener('change', validateForm);
+            document.getElementById('guests').addEventListener('input', validateForm);
+            document.getElementById('available-slots').addEventListener('change', validateForm);
+    
+            document.getElementById('next-button').addEventListener('click', function(event) {
+                if (this.disabled) {
+                    event.preventDefault();
+                    validateForm(); // Ensure the error message is updated
+                }
+            });
+    
+            // Initial validation to ensure the button is disabled on page load
+            validateForm();
+        });
+    
+        function validateForm() {
+            const studioSelected = document.querySelector('input[name="studio"]:checked');
+            const dateSelected = document.getElementById('date').value;
+            const guestsSelected = document.getElementById('guests').value;
+            const timeSlotSelected = document.querySelector('input[name="time_slot"]:checked');
+    
+            const nextButton = document.getElementById('next-button');
+            const errorMessage = document.getElementById('error-message');
+    
+            if (studioSelected && dateSelected && guestsSelected && timeSlotSelected) {
+                nextButton.disabled = false;
+                errorMessage.style.display = 'none';
+            } else {
+                nextButton.disabled = true;
+                errorMessage.style.display = 'block';
+                errorMessage.textContent = 'Please complete all sections before proceeding.';
+            }
+        }
+
+
+    </script>
+</body>
+</html>
+{% endblock %}

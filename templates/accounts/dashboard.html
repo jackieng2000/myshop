@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+Your Purchase History
+{% endblock %}
+
+{% block content %}
+
+<style>
+  .background {
+      background-image: url("{% static 'img/common-img/backg01.jpg' %}");
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      height: 150vh;
+      position: relative;
+  }
+  .table td {
+      word-wrap: break-word; /* Allow wrapping for long text */
+      max-width: 200px; /* Set a max width for the description column */
+  }
+</style>
+
+<div class="background">
+    <div class="container mt-0">
+
+        <div class="row">
+            <!-- Card for User Info -->
+            <div class="col-md-5 mb-5">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>User Information</h5>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">{{ username }}</h5>
+                        <p class="card-text">Email: {{ email }}</p>
+                        <p class="card-text">Registered on: {{ registered_date }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card for Personal Details -->
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>Personal Details</h5>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text">First Name: {{ first_name }}</p>
+                        <p class="card-text">Last Name: {{ last_name }}</p>
+                        <p class="card-text">Phone Number: {{ phone_number }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card for Order Summary -->
+            <div class="col-md-3 mb-3">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>Order Summary</h5>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text">Total Purchase: ${{ total_price }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card mb-1">
+            <div class="card-header">
+                <h5>Order Details</h5>
+            </div>
+            <div class="card-body">
+                <table class="table table-striped table-responsive">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th scope="col">Product</th>
+                            <th scope="col">Description</th>
+                            <th scope="col">Price</th>
+                            <th scope="col">Quantity</th>
+                            <th scope="col">Total Price</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in order_items %}
+                        <tr>
+                            <td>{{ item.product.name }}</td>
+                            <td>{{ item.product_desc }}</td>
+                            <td>${{ item.price }}</td>
+                            <td>{{ item.quantity }}</td>
+                            <td>${{ item.total_item_price }}</td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="5" class="text-center">No order items found.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+
+{% endblock %}

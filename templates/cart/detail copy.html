@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+  Your shopping cart
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+  <h3 class="text-center">Your Shopping Cart</h3>
+
+  <div class="card">
+    <div class="card-body">
+      <table class="table table-bordered">
+        <thead class="thead-light">
+          <tr>
+            <th>Image</th>
+            <th>Product</th>
+            <th>Description</th>
+            <th>Quantity</th>
+            <th>Remove</th>
+            <th>Unit Price</th>
+            <th>Total Price</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in cart %}
+            {% with product=item.product %}
+              <tr>
+                <td>
+                  <a class="product-desc" href="{{ product.get_absolute_url }}">
+                    <img class="standard-image" src="{% if product.image %}{{ product.image.url }}{% else %}{% static 'img/no_image.png' %}{% endif %}" alt="{{ product.name }}">
+                  </a>
+                </td>
+                <td>{{ product.name }}</td>
+                <td>{{ item.product_desc |linebreaks }}</td>
+                <td>
+                  <form action="{% url 'cart:cart_add' product.id %}" method="post">
+                    {{ item.update_quantity_form.quantity }}
+                    {{ item.update_quantity_form.override }}
+                    <button type="submit" class="btn btn-link btn-sm">Update</button>
+                    {% csrf_token %}
+                  </form>
+                </td>
+                <td>
+                  <form action="{% url 'cart:cart_remove' product.id %}" method="post">
+                    <button type="submit" class="btn btn-link btn-sm text-danger">Remove</button>
+                    {% csrf_token %}
+                  </form>
+                </td>
+                <td class="num">${{ item.price }}</td>
+                <td class="num">${{ item.total_price }}</td>
+              </tr>
+            {% endwith %}
+          {% endfor %}
+          <tr class="table-success">
+            <td>Total</td>
+            <td colspan="5"></td>
+            <td class="num">${{ cart.get_total_price }}</td>
+          </tr>
+        </tbody>
+      </table>
+      
+      <div class="text-right">
+        <a href="{% url 'shop:index' %}" class="btn btn-light">Continue Shopping</a>
+        <a href="{% url 'orders:order_create' %}" class="btn btn-success">Checkout</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+
+  .product-desc {
+    white-space: pre-wrap; /* Preserves whitespace and wraps text */
+    word-wrap: break-word; /* Breaks long words */
+} 
+
+  .standard-image {
+    height: 90px; /* Set to approximately 3 times the row height */
+    width: auto; /* Maintain aspect ratio */
+    object-fit: cover; /* Maintain aspect ratio */
+    border-radius: 2px; /* Optional: adds rounded corners */
+  }
+
+  /* Adjust the row height if needed */
+  tr {
+    height: 30px; /* Set a fixed height for each row */
+  }
+</style>
+{% endblock %}

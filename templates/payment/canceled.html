@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block title %}Payment NOT success{% endblock %}
+{% load static %}
+{% block content %}
+<div class='background'>
+<div class='container'>
+  <h1>There is problem in payment process, your payment has NOT been processed, please contact our support : at 3456-7890</h1>
+   
+  <h1>{{error_message}}</h1>
+    <p>
+        <h3>You can go back to  </h3>  <br>
+        <a href="{% url 'shop:index' %}" class="btn btn-primary">Home</a> 
+    </p>
+</div>
+</div>
+<style>
+        
+  .background {
+      background-image: url("{% static 'img/shop4-detail-background.jpg' %}"); /* Adjust the path */
+      background-size: cover; /* Cover the entire container */
+      background-position: center; /* Center the image */
+      background-repeat: no-repeat; /* Prevent repeating */
+      height: 80vh; /* Full viewport height */
+      position: relative; /* Position for absolute children if needed */
+  } 
+
+</style>
+{% endblock %}

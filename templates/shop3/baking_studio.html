@@ -1,0 +1,247 @@
+{% extends 'base.html' %} 
+{% load humanize %}
+{% block content %}
+{% load static %}
+<!DOCTYPE html>
+<html>
+    <meta charset="utf-8" />
+    <title>{% block title %} Self-service baking studio{% endblock %}</title>
+    <style>
+        body {
+            font-family: 'Dancing Script', cursive;
+            font-size: 18px; /* Slightly larger font size for readability */
+            line-height: 1.6; /* Increased line height for better legibility */
+            margin: 0;
+            padding: 0;
+            background-color: #f5e6ca; /* Warm beige background */
+            color: #4d2d00; /* Rich brown text color */
+        }
+        
+            h1, h2, h3 {
+                font-family: 'Caveat', cursive; /* Cozy bakery-style font */
+            }
+        
+            p {
+                font-family: 'Merienda', cursive; /* Friendly and inviting font */
+            }
+        .container1 {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #f9f1e6; /* Light beige container background */
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .box {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f5e6ca; /* Warm beige info background */
+            border: 1px solid #d4a373; /* Warm brown info border */
+            border-radius: 10px;
+        }
+        .box h3 {
+            color: #4d2d00; /* Rich brown info heading color */
+            font-size: 1.5em;
+        }
+        .box img {
+            max-width: 100%; /* Set the maximum width of the image to 100% of its container */
+            height: auto; /* Allow the image's height to adjust proportionally */
+            display: block; /* Ensure the image behaves as a block element */
+            margin: 0 auto; /* Center the image horizontally within the container */
+        }
+        .equipment ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        .equipment ul li {
+            margin-bottom: 10px;
+        }
+        .booking-button {
+            position: fixed;
+            right: 20px;
+            bottom: 20px;
+            background-color: #ff6347; /* Changing to a brighter color */
+            color: white;
+            padding: 20px 40px; /* Further increased padding for a larger button */
+            border-radius: 10px; /* Rounded corners for a modern look */
+            cursor: pointer;
+            transition: background-color 0.3s;
+            font-size: 20px; /* Larger font size for better visibility */
+            text-transform: uppercase; /* Uppercase text for emphasis */
+            font-weight: bold; /* Bold text for emphasis */
+            etter-spacing: 2px; /* Increased letter spacing for clarity */
+        }
+        .booking-button:hover {
+            background-color: #ff4837; /* Darker color on hover for contrast */
+        }
+        .image-gallery {
+            position: relative;
+            width: 100%;
+            margin: auto;
+            overflow: hidden;
+        }
+        
+        .image-container {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+        }
+        
+        .gallery-image {
+            width: 100%;
+            height: auto;
+            max-height: 600px;
+            object-fit: cover; /* Ensures the image covers the area without distortion */
+            flex-shrink: 0;
+        }
+        .arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            z-index: 1;
+        }
+        
+        .arrow-left {
+            left: 0;
+        }
+        
+        .arrow-right {
+            right: 0;
+        }
+        .studio-gallery {
+            display: flex;
+            flex-direction: column;
+            gap: 20px; /* Adjust the gap as needed */
+        }
+        
+        .studio-image-frame {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px; /* Adjust the gap as needed */
+        }
+        
+        .studio-image {
+            width: calc(50% - 5px); /* Adjust the width as needed */
+            height: auto;
+        }
+        .dots-container {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+        }
+        .dot {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            margin: 0 5px;
+            background-color: #bbb;
+            border-radius: 50%;
+        }
+        
+        .dot.active {
+            background-color: #717171;
+        }
+    </style>
+
+<body>
+    <div class="container1">
+        <h1>Our Self-Service Baking Studio</h1>
+        <p>Embark on a delightful baking journey at our self-service baking studio. Choose from a variety of DIY baking packages with step-by-step recipes and all the ingredients you need. Bake at your own pace and enjoy creating delicious treats from scratch.</p>
+        <p>Each DIY package can accommodate up to 3 people, including one child aged 3-12 years old, so you can bake with family or a friend together without extra fees.</p>
+        <div class="studio-options box">
+            <h2>Choose Your Baking Studio</h2>
+            <p>We offer four different styles of studios for you to choose from: Standard Studio, Pink Studio, White Studio, and Home-like Studio. Each studio provides a unique atmosphere that is perfect for baking and capturing moments to share on social media.</p>
+            <div class="studio-gallery">
+                <div class="studio-image-frame">
+                <img src="{% static 'img/Standard studio.jpg' %}"alt="Standard Studio" class="studio-image">
+                <img src="{% static 'img/Pink studio.jpg' %}" alt="Pink Studio" class="studio-image">
+                </div>
+                <div class="studio-image-frame">
+                <img src="{% static 'img/White studio.jpg' %}" alt="White Studio" class="studio-image">
+                <img src="{% static 'img/Home-like studio.jpg' %}" alt="Home-like Studio" class="studio-image">
+                </div>
+            </div>
+        </div>
+        <div class="equipment box">
+            <h2>Our Studio Equipment</h2>
+            <p>Our studio is equipped with an Electric Mixer Area, Oven Area, Additional Purchase Area, Molds Area, Refrigerator, and Basic Ingredients Area.</p>
+            <p>Our DIY baking packages include aprons, timers, and tablets loaded with video tutorials that guide you through the baking process step by step. Once you finish baking, you can pack up your product in the packaging area and take it home.</p>
+            <p>After baking, simply leave your used utensils in our utensil return area—no need to wash them yourself!</p>
+            <div class="image-gallery">
+                <span class="arrow arrow-left" onclick="showPreviousImage()">&#9664;</span>
+                <div class="image-container">
+                    <img src="{% static 'img/tools 1.jpg' %}" alt="Image 1" class="gallery-image">
+                    <img src="{% static 'img/tools 2.jpg' %}" alt="Image 2" class="gallery-image">
+                    <img src="{% static 'img/tools 3.jpg' %}" alt="Image 3" class="gallery-image">
+                    <img src="{% static 'img/tools 4.jpg' %}" alt="Image 4" class="gallery-image">
+                    <img src="{% static 'img/tools 5.jpg' %}" alt="Image 5" class="gallery-image">
+                    <img src="{% static 'img/tools 6.jpg' %}" alt="Image 6" class="gallery-image">
+                    <img src="{% static 'img/tools 7.jpg' %}" alt="Image 7" class="gallery-image">
+                    <img src="{% static 'img/tools 8.jpg' %}" alt="Image 8" class="gallery-image">
+                    <img src="{% static 'img/tools 9.jpg' %}" alt="Image 9" class="gallery-image">
+                    <img src="{% static 'img/tools 10.jpg' %}" alt="Image 10" class="gallery-image">
+                </div>
+                <span class="arrow arrow-right" onclick="showNextImage()">&#9654;</span>
+                <div class="dots-container"></div>
+            </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        let currentIndex = 0;
+
+        const images = document.querySelectorAll('.gallery-image');
+        const totalImages = images.length;
+        const dotsContainer = document.querySelector('.dots-container');
+
+        // Create dots
+        for (let i = 0; i < totalImages; i++) {
+            const dot = document.createElement('span');
+            dot.classList.add('dot');
+            if (i === 0) {
+                dot.classList.add('active');
+            }
+            dotsContainer.appendChild(dot);
+        }
+
+        function showImage(index) {
+            if (index >= totalImages) {
+                currentIndex = 0;
+            } else if (index < 0) {
+                currentIndex = totalImages - 1;
+            } else {
+                currentIndex = index;
+            }
+            const offset = -currentIndex * 100;
+            document.querySelector('.image-container').style.transform = `translateX(${offset}%)`;
+
+            // Update dots
+            document.querySelectorAll('.dot').forEach((dot, idx) => {
+                dot.classList.toggle('active', idx === currentIndex);
+            });
+        }
+
+        function showNextImage() {
+            showImage(currentIndex + 1);
+        }
+
+        function showPreviousImage() {
+            showImage(currentIndex - 1);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            showImage(currentIndex);
+        });
+    </script>
+</body>
+</html>
+
+
+<a href="{% url 'shop3:booking' %}" class="booking-button">Book Now</a>
+{% endblock %}

@@ -1,0 +1,148 @@
+{% extends "base.html" %}
+{% comment %} {% extends 'base.html' %} {% endcomment %}
+{% load humanize %}
+{% load static %}
+
+{% block title %}
+  {% if products %}Browse Cakes{% endif %}
+{% endblock %}
+
+{% block content %}
+
+<style>
+  .background {
+      background-image: url("{% static 'img/common-img/backg02.jpg' %}"); /* Adjust the path */
+      background-size: cover; /* Cover the entire container */
+      background-position: center; /* Center the image */
+      background-repeat: no-repeat; /* Prevent repeating */
+      height: 200vh; /* Full viewport height */
+      position: relative; /* Position for absolute children if needed */
+  }
+</style>
+
+<div class="background">
+
+  <section id="showcase-inner" class="py-1 text-white">
+    <div class="container">
+      <div class="row text-center">
+        <div class="col-md-12" style="background-color: #e5c9a3;">
+          <h1 >Browse Our Cakes</h1>
+          <p class="lead">
+            Sharing the cake with loved ones, it represents the joy, happiness, celebrations and thanksgiving.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Breadcrumb -->
+  <section id="bc" class="mt-1">
+    <div class="container">
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item">
+            <a href="/shop1/" class="fas fa-birthday-cake"></i> Order Cakes</a>
+          </li>
+          <li class="breadcrumb-item active">Browse Cakes</li>
+        </ol>
+      </nav>
+    </div>
+  </section>
+  
+  <!-- Listings -->
+  <section id="listings" class="py-4">
+    <div class="container">
+      <div class="row">
+        {% if products %}
+        {% for product in products %} 
+        <div class="col-md-6 col-lg-4 mb-4">
+          <div class="card listing-preview">
+            <img class="card-img-top" src={{product.image.url}} alt="" />
+            <div class="card-img-overlay">
+              <h2>
+                <span class="badge badge-secondary text-white" style="background-color: #e9bf85;">${{product.price | intcomma }}</span>
+              </h2>
+            </div>
+            <div class="card-body">
+              <div class="listing-heading text-center">
+                <h4 class="text-primary">{{product.name}}</h4>
+                <p style="text-align: left;">
+                  {% if categories %}
+                    {% for category in categories %}
+                      {% if category.id == product.category_id %}
+                        <i class="fas fa-birthday-cake" style="color: #e9bf85"></i>  
+
+                        <a href="#">
+<!--------                        <a href="{% url 'shop1:category_list' category.id %}">  -------->
+                          <span style="font-size: 15px;">{{category.name}}</span>
+                        </a> 
+                      {% endif %}
+                    {% endfor %}
+                  {% endif %}
+                  <br />
+                  <i class="fas fa-book" style="color: #e9bf85"></i>
+                  <span style="font-size: 15px;">{{product.description}}</span>  
+                </p>
+              </div>
+              <hr />
+              <a href="{{ product.get_absolute_shop1_url }}" class="btn btn-primary">Order</a>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+        {% else %}
+        <div class="col-md-12">
+        <p>No Available Product</p>
+      </div>
+        {% endif %}
+      
+      </div>
+  
+      <div class="row">
+        <div class="col-md-12">
+          
+          <!-- pagination part of the code-->
+          {% if list.has_other_pages %}
+          <ul class="pagination">
+            {% if list.has_previous %}
+            <li class="page-item">
+              <a href="?page={{list.previous_page_number}}" class="page-link">&laquo;</a>
+            </li>  
+            {% else %}
+            <li class="page-item disabled">
+              <a class="page-link" href="#">&laquo;</a>
+            </li>
+            {% endif %}
+            <!-- use for loop to gen page numbers -->
+            {% for i in list.paginator.page_range %}
+            <!-- check current page, then change the button color -->
+            {% if list.number == i %}
+            <li class="page-item active">
+              <a class="page-link">{{i}}</a>
+            </li>
+            {% else %}
+           <li class="page-item">
+              <a class="page-link" href="?page={{i}}">{{i}}</a>
+            </li> 
+            {% endif %}
+            {% endfor %}
+            
+            <!-- next button -->
+            {% if list.has_next %}
+            <li class="page-item">
+            <a href="?page={{list.next_page_number}}" class="page-link" >&raquo;</a>
+            </li>
+            {% else %}
+            <li class="page-item disabled">
+              <a class="page-link" href="#">&raquo;</a>
+            </li>
+            {% endif %}
+          </ul>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
+{% endblock %}

@@ -1,0 +1,265 @@
+{% extends "base.html" %}
+{% load humanize %}
+{% load static %}
+
+{% block title %}
+  {% if category %}{{ category.name }} | {{ product.name }} {% else %}{% endif %}
+{% endblock %}
+
+{% block content %}
+
+<style>
+  
+    .background {
+        background-image: url("{% static 'img/common-img/backg02.jpg' %}"); /* Adjust the path */
+        background-size: cover; /* Cover the entire container */
+        background-position: center; /* Center the image */
+        background-repeat: no-repeat; /* Prevent repeating */
+        height: 200vh; /* Full viewport height */
+        position: relative; /* Position for absolute children if needed */
+    }
+
+  .card-body-small {
+    padding: 0.4rem; /* Reduced padding */
+    font-size: 0.6rem; /* Smaller font size */}
+
+</style>
+
+
+<div class='background'>
+
+
+<!-- Listing -->
+<section id="listing" class="py-4">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-3">
+
+        <!-- Product Name and Main Image -->
+        <div class="card text-center mb-1">
+          <div class="card-body-small">
+          <h6 class="text-center">{{ product.name }}</h6>
+          <img src="{{ product.image.url }}" alt="" class="img-main img-fluid mb-3" />
+          </div>
+        </div>
+        
+        <!---------Prodcut Description------------>
+
+        <div class="card text-center mb-1">
+          <div class="card-body-small">
+            <p class="card-text">
+              {{product.description}}
+            </p>
+          </div>
+        </div>
+
+        <!-- Allergen Information -->
+        <div class="card text-center mb-1">
+          <div class="card-body-small">
+            <h6>Allergen Note:</h6>
+            <p class="card-text">
+              {% if product_detail_items %}
+                {% for item in product_detail_items %}
+                  {{ item.allergen }}{% if not forloop.last %}, {% endif %}
+                {% endfor %}
+              {% endif %}
+            </p>
+          </div>
+        </div>
+      </div>
+
+      
+      <div class="col-md-6">
+
+        <div class="card text-center mb-1">
+          <h6 class="card-title">Order Details</h6>
+
+          <div class="card-body-small">
+            
+
+            <!-- Send Out Ordering -->
+
+          
+          
+          <form action="{% url 'shop1:ordering' product.id product.slug %}" method="POST" class="card-body-small ">
+
+                <div class="card mb-1">
+                  <div style="text-align: left;">
+                    Quantity<small class="text-danger">*</small><br>
+                  <select name="qty" id="qty" class="card-body-small w-30" required>
+                      <option value="1">Qty: 1</option><!-- Default option -->
+                      <option value="2">Qty: 2</option>
+                      <option value="3">Qty: 3</option>
+                      <option value="4">Qty: 4</option>
+                      <option value="5">Qty: 5</option>
+                  </select>
+                  <br>
+                  </div>
+
+               
+                
+                  <div style="text-align: left;"><br>
+                    Size<small class="text-danger">*</small><br>
+                      <select name="cake_size_weight_price" class="card-body-small w-70">
+                        {% if product_detail_items %}
+                          {% for item in product_detail_items %}
+                            <option value="{{ item.First_size }}/{{ item.First_weight }}/{{ item.First_desc }}/{{ item.First_price }}">
+                              Size: {{ item.First_size }} / Weight: {{ item.First_weight }} / {{ item.First_desc }} / ${{ item.First_price }}
+                            </option>
+                            <option value="{{ item.Second_size }}/{{ item.Second_weight }}/{{ item.Second_desc }}/{{ item.Second_price }}">
+                              Size: {{ item.Second_size }} / Weight: {{ item.Second_weight }} / {{ item.Second_desc }} / ${{ item.Second_price }}
+                            </option>
+                            <option value="{{ item.Third_size }}/{{ item.Third_weight }}/{{ item.Third_desc }}/{{ item.Third_price }}">
+                              Size: {{ item.Third_size }} / Weight: {{ item.Third_weight }} / {{ item.Third_desc }} / ${{ item.Third_price }}
+                            </option>
+                            <option value="{{ item.Fourth_size }}/{{ item.Fourth_weight }}/{{ item.Fourth_desc }}/{{ item.Fourth_price }}">
+                              Size: {{ item.Fourth_size }} / Weight: {{ item.Fourth_weight }} / {{ item.Fourth_desc }} / ${{ item.Fourth_price }}
+                            </option>
+                          {% endfor %}
+                        {% endif %}
+                      </select>
+                      <br><br>
+                    </div>
+                      <div style="text-align: left;">
+                      Contact Person<small class="text-danger">*</small><br>
+                      <input type="text" class="card-body-small " name="contact_person" required />
+                      </div>
+                      <br>
+
+                      <div style="text-align: left;">
+                      Contact Number<small class="text-danger">*</small><br>
+                          <input type="text" class="card-body-small" name="contact_number" pattern="[0-9]{8}" maxlength="8" required />
+                          <div class="invalid-feedback">Contact Number must be 8 digits.</div>
+                      </div>
+                      <br>
+
+                      <div style="text-align: left;">
+                      Contact Email<small class="text-danger">*</small><br>
+                      <input type="email" class="card-body-small" name="contact_email" required />
+                      </div>
+                      <br>
+                      
+
+                <!-- Select pickup delivery location -->
+                <div style="text-align: left;">Pickup In / Delivery To <small class="text-danger">*</small><br>
+                <select name="pickup_delivery" class="card-body-small">
+
+                <option value="Pickup In Store - Fortress Hill [Hong Kong Island] /0">Pickup In Store: Fortress Hill [Hong Kong Island]</option>
+                <option value="Pickup In Store - Mei Foo [Kowloon] /0">Pickup In Store: Mei Foo [Kowloon]</option>
+                <option value="Pickup In Store - Tseung Kwan O [New Territories] /0">Pickup In Store: Tseung Kwan O [New Territories]</option>
+                <option value="Delivery To - Hong Kong Island /0">Delivery To - Hong Kong Island</option>
+                <option value="Delivery To - Kowloon /0">Delivery To - Kowloon</option>
+                <option value="Delivery To - New Territories /0">Delivery To - New Territories</option>
+                <option value="Delivery To - Islands /0">Delivery To - Islands</option>
+                </select>
+                </div>
+                <br>
+
+                      <div style="text-align: left;">Date [<font color="red">Earliest</font> pickup / delivery date <small class="text-danger">*</small><br>
+                            <b>{{ fastest }}</b>
+                        <select name="pickup_delivery_date" class="card-body-small">
+                          {% if delivery_date.items %}
+                            {% for key, value in delivery_date.items %}
+                              <option value="{{ value }}">{{ value }}</option>
+                            {% endfor %}
+                          {% endif %}
+                        </select>
+                      </div>
+                      <br>
+          
+                      <div style="text-align: left;">Pick up / delivery time <small class="text-danger">*</small><br>
+                        <select name="pickup_delivery_time" class="card-body-small">
+                          <option value="10am - 2pm">10am - 2pm</option>
+                          <option value="2pm - 6pm">2pm - 6pm</option>
+                          <option value="6pm - 9pm">6pm - 9pm</option>
+                        </select>
+                      </div>
+                      <br>
+          
+                      <div style="text-align: left;">
+                        Delivery Address<br>
+                        <input type="text" class="card-body-small w-70" name="delivery_address" />
+                      </div>
+                      <br>
+          
+        </div>
+              {% csrf_token %}
+              <button class="btn btn-secondary btn-block mt-1" type="submit">Confirm</button>
+              </form>
+          
+        </div>
+      </div>
+    </div>
+
+
+        <!--- Store Locations ------>
+        <div class="col-md-3">
+        
+          <div class="card text-center mb-1">
+            <div class="card-body-small">
+              <h6 class="card-title">Store Locations</h6>
+              <p class="card-text">
+                <p style="text-align: left;">
+                  <span style="background-color: #ced4da; padding: 5px; border-radius: 4px;">[Hong Kong Island] Fortress Hill</span><br />
+                  M/F, Greenwich Centre, No.260 King's Road, Fortress Hill, Hong Kong
+                  <small class="form-text text-muted" style="text-align: right; background-color: #f9f5f5; padding: 5px; border-radius: 4px;">MTR station: Fortress Hill (Exit B)</small>
+                </p>
+                <hr>
+                <p style="text-align: left;">
+                  <span style="background-color: #ced4da; padding: 5px; border-radius: 4px;">[Kowloon] Mei Foo</span><br />
+                  G/F, Phase 7, Mount Sterling Mall, Mei Foo, Kowloon  
+                  <small class="form-text text-muted" style="text-align: right; background-color: #f9f5f5; padding: 5px; border-radius: 4px;">MTR station: Mei Foo (Exit E)</small>
+                </p>
+                <hr>
+                <p style="text-align: left;">
+                  <span style="background-color: #ced4da; padding: 5px; border-radius: 4px;">[New Territories] Tseung Kwan O</span><br />
+                  Shop no. 1A, level 6, East Point City, 8 Chung Wa Road, Tseung Kwan O
+                  <small class="form-text text-muted" style="text-align: right; background-color: #f9f5f5; padding: 5px; border-radius: 4px;">MTR station: Hang Hau (Exit A1)</small>
+                </p>
+              </p>
+              <div class="card-footer text-muted">
+                Store Business Hours: <br />
+                (Daily) 10am - 9pm
+              </div>
+            </div>
+          </div>
+        </div>
+  
+
+
+    </div>
+  </div>
+</section>
+
+<script>
+
+  document.querySelector("form").addEventListener("submit", function(event) {
+      const contactPersonInput = document.querySelector("input[name='contact_person']");
+      if (!contactPersonInput.value.trim()) {
+          alert("Contact Person is required.");
+          event.preventDefault(); // Prevent form submission
+      }
+  });
+
+  document.querySelector("form").addEventListener("submit", function(event) {
+    const contactNumberInput = document.querySelector("input[name='contact_number']");
+    if (!contactNumberInput.value.trim()) {
+        alert("Contact Phone number is required.");
+        event.preventDefault(); // Prevent form submission
+    }
+    
+  document.querySelector("form").addEventListener("submit", function(event) {
+      const contactemailInput = document.querySelector("input[name='contact_email']");
+      if (!contactemailInput.value.trim()) {
+          alert("Contact Email address is required.");
+          event.preventDefault(); // Prevent form submission
+      }
+    });
+
+
+
+  </script>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,3 @@
+id,name,slug,contents,start_date_time,end_date_time,location,quota,filled_place,available,last_modified,modified_by,instructor_id,menu_name_id,product_id_id,studio_name_id
+5,Japan Sweets with John,japan-sweets-with-john,Check our new class,2024-10-23 15:00:00+08,2024-10-23 17:00:00+08,white studio,20,10,t,2024-10-10 20:10:42.392085+08,admin,1,1,7,2
+4,Birthday Cake,birthday-cake,Have a sweet memory,2024-10-15 12:00:00+08,2024-10-15 13:00:00+08,Mong Kok,20,1,t,2024-10-10 20:11:12.507528+08,admin,2,2,5,3
